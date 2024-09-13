@@ -18,7 +18,7 @@ public class HelloApplication extends Application {
 	}
 
 	public static void main(String[] args) {
-		Schema schema = Z.string()
+		XSchema schema = XBuilder.string()
 			.minLength(3)
 			.maxLength(5)
 			.nullable();
@@ -27,9 +27,10 @@ public class HelloApplication extends Application {
 		System.out.println(schema.parse("Hi"));
 		System.out.println(schema.parse("Welcome"));
 		System.out.println(schema.parse(null));
+		System.out.println(schema.parse(getObject()));
 	}
 
-	public Object getObject() {
+	public static Object getObject() {
 		return 1;
 	}
 }

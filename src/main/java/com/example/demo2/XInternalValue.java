@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Parsed<T> {
+public class XInternalValue<T> {
 	private final T value;
 	private final List<String> errors = new ArrayList<>();
 
-	public Parsed(T value) {
+	public XInternalValue(T value) {
 		this.value = value;
 	}
 
