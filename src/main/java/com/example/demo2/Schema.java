@@ -1,32 +1,24 @@
 package com.example.demo2;
 
 import java.util.List;
+import java.util.function.Function;
 
-public class Schema {
-	public static class ParseSchemaException extends Exception {}
+public abstract class Schema<T> {
+	protected Function<T, Parsed<T>> chain = Parsed::new;
 
-	public record ValidationResult(List<String> errors) {
-		public boolean hasErrors() {
-			return errors.isEmpty();
+	private boolean isNullable = false;
+
+	public ParseResult parse(T obj) {
+		if (obj == null) {
+			return new ParseResult(isNullable ? List.of() : List.of("null"));
 		}
+
+		return new ParseResult(chain.apply(obj).getErrors());
 	}
 
-	public static Parsable string() {
-		return new VString();
+	public Schema<T> nullable() {
+		isNullable = true;
+
+		return this;
 	}
-
-//	public void parse(Object obj) throws ParseSchemaException {
-//
-//	}
-
-//	public ValidationResult safeParse(Object obj) {
-//		try {
-//			this.
-//		}
-//		return
-//	}
-//
-	public static Schema nullable() {
-
-	}
- }
+}

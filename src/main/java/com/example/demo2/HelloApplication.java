@@ -18,13 +18,18 @@ public class HelloApplication extends Application {
 	}
 
 	public static void main(String[] args) {
-		VString schema = Schema.string()
+		Schema schema = Z.string()
 			.minLength(3)
-			.maxLength(5);
+			.maxLength(5)
+			.nullable();
 
 		System.out.println(schema.parse("Hello"));
 		System.out.println(schema.parse("Hi"));
 		System.out.println(schema.parse("Welcome"));
 		System.out.println(schema.parse(null));
+	}
+
+	public Object getObject() {
+		return 1;
 	}
 }
