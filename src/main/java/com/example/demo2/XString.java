@@ -1,7 +1,9 @@
 package com.example.demo2;
 
-public class StringSchema extends Schema<String> {
-	public StringSchema minLength(int length) {
+import java.util.List;
+
+public class XString extends AbstractXSchema<String> {
+	public XString minLength(int length) {
 		chain = chain.andThen((parsed) -> {
 			if (parsed.getValue().length() < length) {
 				parsed.addError("min-length");
@@ -13,7 +15,7 @@ public class StringSchema extends Schema<String> {
 		return this;
 	}
 
-	public StringSchema maxLength(int length) {
+	public XString maxLength(int length) {
 		chain = chain.andThen((parsed) -> {
 			if (parsed.getValue().length() > length) {
 				parsed.addError("max-length");
@@ -25,12 +27,12 @@ public class StringSchema extends Schema<String> {
 		return this;
 	}
 
-	public Parsed<String> safeParse(Object obj) {
-		if (obj instanceof String str) {
-
-			return chain.apply(str);
+	@Override
+	public XResult _parse(Object obj) {
+		if (obj instanceof String string) {
+			return new XResult(chain.apply(string).getErrors());
 		}
 
-		return new Parsed<>(null);
+		return new XResult(List.of("expcted-string"));
 	}
 }

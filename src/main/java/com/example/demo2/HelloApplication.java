@@ -20,8 +20,7 @@ public class HelloApplication extends Application {
 	public static void main(String[] args) {
 		XSchema schema = XBuilder.string()
 			.minLength(3)
-			.maxLength(5)
-			.nullable();
+			.maxLength(5);
 
 		System.out.println(schema.parse("Hello"));
 		System.out.println(schema.parse("Hi"));
