@@ -20,6 +20,10 @@ public class Parsed<T> {
 		errors.add(error);
 	}
 
+	public List<String> getErrors() {
+		return errors;
+	}
+
 	@Override
 	public String toString() {
 		return "Parsed{" +
