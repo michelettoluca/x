@@ -3,7 +3,7 @@ package com.example.demo2.x;
 import java.util.List;
 import java.util.function.Function;
 
-public abstract class XAbstractSchema<T> implements XSchema {
+abstract class XAbstractSchema<T> implements XSchema {
 	protected Function<T, XValue<T>> chain = XValue::new;
 
 	private boolean isNullable = false;
