@@ -1,7 +1,6 @@
 package com.example.demo2;
 
 import com.example.demo2.x.XBuilder;
-import com.example.demo2.x.XException;
 import com.example.demo2.x.XSchema;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -33,11 +32,7 @@ public class HelloApplication extends Application {
 			.equals(3)
 			.nullable();
 
-		try {
-			schema.parse(123);
-		} catch (XException e) {
-			throw new RuntimeException(e);
-		}
+		schema.parse(123);
 		System.out.println(num.safeParse(123));
 	}
 }

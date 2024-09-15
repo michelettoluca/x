@@ -12,4 +12,10 @@ public class XException extends RuntimeException {
 	public List<XError> getErrors() {
 		return errors;
 	}
+
+	@Override
+	public String getMessage() {
+		return errors.toString();
+	}
+
 }
