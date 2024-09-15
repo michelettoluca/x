@@ -37,10 +37,10 @@ public class HelloApplication extends Application {
 			.equals(2);
 
 
-		System.out.println(stringSchema.safeParse(XBuilder.string()));
-		System.out.println(stringSchema.safeParse("2D"));
-		System.out.println(num.safeParse(2));
-		System.out.println(num.safeParse(-10));
-		System.out.println(num.safeParse(10));
+//		System.out.println(stringSchema.safeParse(XBuilder.string()));
+		System.out.println(stringSchema.safeParse("PALLE"));
+//		System.out.println(num.safeParse(2));
+//		System.out.println(num.safeParse(-10));
+//		System.out.println(num.safeParse(10));
 	}
 }

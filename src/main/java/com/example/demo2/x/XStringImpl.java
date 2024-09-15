@@ -75,7 +75,7 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 				.stream()
 				.anyMatch(option -> getter.apply(option).equals(value));
 
-			if (isContained) {
+			if (!isContained) {
 				result.addError("in");
 			}
 		});
