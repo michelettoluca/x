@@ -1,14 +1,14 @@
-package com.example.demo2;
+package com.example.demo2.x;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class XInternalValue<T> {
+class XValue<T> {
 	private final T value;
-	private final List<String> errors = new ArrayList<>();
+	private final List<XError> errors = new ArrayList<>();
 
-	public XInternalValue(T value) {
+	public XValue(T value) {
 		this.value = value;
 	}
 
@@ -16,11 +16,13 @@ public class XInternalValue<T> {
 		return value;
 	}
 
-	public void addError(String error) {
-		errors.add(error);
+	public void addError(XError error) {
+		if (error != null) {
+			errors.add(error);
+		}
 	}
 
-	public List<String> getErrors() {
+	public List<XError> getErrors() {
 		return errors;
 	}
 

@@ -1,12 +1,12 @@
-package com.example.demo2;
+package com.example.demo2.x;
 
 import java.util.List;
 
-public class XString extends AbstractXSchema<String> {
+class XString extends XAbstractSchema<String> {
 	public XString minLength(int length) {
 		chain = chain.andThen((parsed) -> {
 			if (parsed.getValue().length() < length) {
-				parsed.addError("min-length");
+				parsed.addError(new XError("min-length"));
 			}
 
 			return parsed;
@@ -18,7 +18,19 @@ public class XString extends AbstractXSchema<String> {
 	public XString maxLength(int length) {
 		chain = chain.andThen((parsed) -> {
 			if (parsed.getValue().length() > length) {
-				parsed.addError("max-length");
+				parsed.addError(new XError("max-length"));
+			}
+
+			return parsed;
+		});
+
+		return this;
+	}
+
+	public XString equals(String string) {
+		chain = chain.andThen((parsed) -> {
+			if (!parsed.getValue().equals(string)) {
+				parsed.addError(new XError("not-equal"));
 			}
 
 			return parsed;
@@ -33,6 +45,6 @@ public class XString extends AbstractXSchema<String> {
 			return new XResult(chain.apply(string).getErrors());
 		}
 
-		return new XResult(List.of("expcted-string"));
+		return new XResult(List.of(new XError("expected-string")));
 	}
 }

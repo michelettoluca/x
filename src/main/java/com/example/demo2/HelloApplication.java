@@ -1,5 +1,7 @@
 package com.example.demo2;
 
+import com.example.demo2.x.XBuilder;
+import com.example.demo2.x.XSchema;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -19,17 +21,17 @@ public class HelloApplication extends Application {
 
 	public static void main(String[] args) {
 		XSchema schema = XBuilder.string()
-			.minLength(3)
-			.maxLength(5);
+//			.minLength(3)
+			.maxLength(5)
+			.equals("Hi")
+			.nullable();
 
-		System.out.println(schema.parse("Hello"));
-		System.out.println(schema.parse("Hi"));
-		System.out.println(schema.parse("Welcome"));
-		System.out.println(schema.parse(null));
-		System.out.println(schema.parse(getObject()));
-	}
+		XSchema num = XBuilder.number()
+//			.minLength(3)
+			.max(1235)
+			.equals(3d);
 
-	public static Object getObject() {
-		return 1;
+		System.out.println(schema.parse(123));
+		System.out.println(num.parse(123));
 	}
 }
