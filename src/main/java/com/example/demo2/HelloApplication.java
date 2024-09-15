@@ -21,15 +21,15 @@ public class HelloApplication extends Application {
 
 	public static void main(String[] args) {
 		XSchema schema = XBuilder.string()
-//			.minLength(3)
+			.minLength(3)
 			.maxLength(5)
 			.equals("Hi")
 			.nullable();
 
 		XSchema num = XBuilder.number()
-//			.minLength(3)
+			.min(3)
 			.max(1235)
-			.equals(3d);
+			.equals(3);
 
 		System.out.println(schema.parse(123));
 		System.out.println(num.parse(123));

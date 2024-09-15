@@ -2,10 +2,10 @@ package com.example.demo2.x;
 
 public class XBuilder {
 	public static XString string() {
-		return new XString();
+		return new XStringImpl();
 	}
 
 	public static XNumber number() {
-		return new XNumber();
+		return new XNumberImpl();
 	}
 }
