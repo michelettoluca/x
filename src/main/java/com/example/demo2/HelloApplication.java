@@ -8,6 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class HelloApplication extends Application {
 	@Override
@@ -19,20 +20,26 @@ public class HelloApplication extends Application {
 		stage.show();
 	}
 
+	enum Test {
+		PALLE,
+		PALLE2
+	}
+
 	public static void main(String[] args) {
-		XSchema schema = XBuilder.string()
+		XSchema stringSchema = XBuilder.string()
 			.minLength(3)
-			.maxLength(5)
-			.equals("Hi")
+			.in(List.of(Test.values()), Test::name)
 			.nullable();
 
 		XSchema num = XBuilder.number()
 			.min(3)
-			.max(1235)
-			.equals(3)
-			.nullable();
+			.equals(3);
 
-		schema.parse(123);
-		System.out.println(num.safeParse(123));
+
+		System.out.println(num.safeParse(XBuilder.string()));
+		System.out.println(num.safeParse(2D));
+		System.out.println(num.safeParse(2F));
+		System.out.println(num.safeParse(2L));
+		System.out.println(num.safeParse(2));
 	}
 }

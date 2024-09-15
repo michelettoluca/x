@@ -6,7 +6,7 @@ import java.util.function.Function;
 abstract class XAbstractSchema<T> implements XSchema {
 	protected Function<T, XValue<T>> chain = XValue::new;
 
-	public abstract XResult _parse(Object obj);
+	protected abstract XResult type(Object obj);
 
 	private boolean isNullable = false;
 
@@ -19,10 +19,10 @@ abstract class XAbstractSchema<T> implements XSchema {
 	@Override
 	public XResult safeParse(Object obj) {
 		if (obj == null) {
-			return new XResult(isNullable ? List.of() : List.of(new XError("null")));
+			return new XResult(isNullable ? List.of() : List.of(buildError("null")));
 		}
 
-		return this._parse(obj);
+		return this.type(obj);
 	}
 
 	@Override
@@ -32,5 +32,16 @@ abstract class XAbstractSchema<T> implements XSchema {
 		if (result.hasErrors()) {
 			throw new XException(result.errors());
 		}
+	}
+
+	protected XError buildError(String message) {
+		StackTraceElement invoker = Thread.currentThread().getStackTrace()[2];
+		String origin = invoker.getMethodName();
+
+		if (origin.contains("lambda")) {
+			origin = origin.split("\\$")[1];
+		}
+
+		return new XError(origin, message);
 	}
 }

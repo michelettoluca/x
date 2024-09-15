@@ -2,10 +2,10 @@ package com.example.demo2.x;
 
 import java.util.List;
 
-public class XException extends RuntimeException {
+public class XException extends Exception {
 	private final List<XError> errors;
 
-	public XException(List<XError> errors) {
+	XException(List<XError> errors) {
 		this.errors = errors;
 	}
 
