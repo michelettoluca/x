@@ -14,5 +14,5 @@ public interface XString extends XSchema {
 
 	XString in(List<String> options);
 
-	<T>XString in(List<T> options, Function<T, String> getter);
+	<T> XString in(List<T> options, Function<T, String> getter);
 }

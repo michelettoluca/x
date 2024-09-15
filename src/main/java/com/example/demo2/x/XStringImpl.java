@@ -5,10 +5,19 @@ import java.util.function.Function;
 
 class XStringImpl extends XAbstractSchema<String> implements XString {
 	@Override
+	protected void type(Object obj, XResult result) {
+		if (obj instanceof String value) {
+			parser.accept(value, result);
+		} else {
+			result.addError("Expected String, but got " + obj.getClass().getSimpleName());
+		}
+	}
+
+	@Override
 	public XString minLength(int length) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (length > value.length()) {
-				errors.addError("min-length");
+				result.addError("min-length");
 			}
 		});
 
@@ -17,9 +26,9 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString maxLength(int length) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (value.length() > length) {
-				errors.addError("max-length");
+				result.addError("max-length");
 			}
 		});
 
@@ -28,9 +37,9 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString equals(String string) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (!value.equals(string)) {
-				errors.addError("not-equal");
+				result.addError("not-equal");
 			}
 		});
 
@@ -39,9 +48,9 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString matches(String regex) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (!value.matches(regex)) {
-				errors.addError("regex");
+				result.addError("regex");
 			}
 		});
 
@@ -50,9 +59,9 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString in(List<String> options) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (!options.contains(value)) {
-				errors.addError("in");
+				result.addError("in");
 			}
 		});
 
@@ -61,25 +70,16 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public <T> XString in(List<T> options, Function<T, String> getter) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			boolean isContained = options
 				.stream()
 				.anyMatch(option -> getter.apply(option).equals(value));
 
 			if (isContained) {
-				errors.addError("in");
+				result.addError("in");
 			}
 		});
 
 		return this;
-	}
-
-	@Override
-	protected void type(Object obj, XResult result) {
-		if (obj instanceof String value) {
-			chain.accept(value, result);
-		} else {
-			result.addError("Expected String, but got " + obj.getClass().getSimpleName());
-		}
 	}
 }

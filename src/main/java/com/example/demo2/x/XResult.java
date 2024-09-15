@@ -1,6 +1,7 @@
 package com.example.demo2.x;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class XResult {
@@ -22,7 +23,7 @@ public class XResult {
 	}
 
 	public List<XError> getErrors() {
-		return errors;
+		return Collections.unmodifiableList(errors);
 	}
 
 	@Override

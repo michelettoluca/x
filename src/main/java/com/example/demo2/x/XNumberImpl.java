@@ -1,13 +1,21 @@
 package com.example.demo2.x;
 
-import java.util.List;
 
 class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 	@Override
+	public void type(Object obj, XResult result) {
+		if (obj instanceof Number value) {
+			parser.accept(value, result);
+		} else {
+			result.addError("Expected Number, but got " + obj.getClass().getSimpleName());
+		}
+	}
+
+	@Override
 	public XNumber min(Number min) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (value.doubleValue() < min.doubleValue()) {
-				errors.addError("min");
+				result.addError("min");
 			}
 		});
 
@@ -16,9 +24,9 @@ class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 
 	@Override
 	public XNumber max(Number max) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (value.doubleValue() > max.doubleValue()) {
-				errors.addError("max");
+				result.addError("max");
 			}
 		});
 
@@ -27,21 +35,12 @@ class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 
 	@Override
 	public XNumber equals(Number target) {
-		register((value, errors) -> {
+		register((value, result) -> {
 			if (value.doubleValue() != target.doubleValue()) {
-				errors.addError("equals");
+				result.addError("equals");
 			}
 		});
 
 		return this;
-	}
-
-	@Override
-	public void type(Object obj, XResult result) {
-		if (obj instanceof Number value) {
-			chain.accept(value, result);
-		} else {
-			result.addError("Expected String, but got " + obj.getClass().getSimpleName());
-		}
 	}
 }

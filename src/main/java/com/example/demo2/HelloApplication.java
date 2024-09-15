@@ -32,13 +32,15 @@ public class HelloApplication extends Application {
 			.nullable();
 
 		XSchema num = XBuilder.number()
-			.min(1);
+			.min(1)
+			.max(10)
+			.equals(2);
 
 
-		System.out.println(num.safeParse(XBuilder.string()));
-		System.out.println(num.safeParse(2D));
-		System.out.println(num.safeParse(2F));
-		System.out.println(num.safeParse(2L));
+		System.out.println(stringSchema.safeParse(XBuilder.string()));
+		System.out.println(stringSchema.safeParse("2D"));
 		System.out.println(num.safeParse(2));
+		System.out.println(num.safeParse(-10));
+		System.out.println(num.safeParse(10));
 	}
 }
