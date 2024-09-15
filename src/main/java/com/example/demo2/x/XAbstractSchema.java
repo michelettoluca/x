@@ -1,12 +1,17 @@
 package com.example.demo2.x;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiConsumer;
 
 abstract class XAbstractSchema<T> implements XSchema {
-	protected Function<T, XValue<T>> chain = XValue::new;
+	protected BiConsumer<T, XResult> chain = (value, errors) -> {
+	};
 
-	protected abstract XResult type(Object obj);
+	protected void register(BiConsumer<T, XResult> current) {
+		chain = chain.andThen(current);
+	}
+
+	protected abstract void type(Object obj, XResult errors);
 
 	private boolean isNullable = false;
 
@@ -18,11 +23,15 @@ abstract class XAbstractSchema<T> implements XSchema {
 
 	@Override
 	public XResult safeParse(Object obj) {
-		if (obj == null) {
-			return new XResult(isNullable ? List.of() : List.of(buildError("null")));
+		XResult result = new XResult();
+
+		if (obj != null) {
+			type(obj, result);
+		} else if (!isNullable){
+			result.addError("null");
 		}
 
-		return this.type(obj);
+		return result;
 	}
 
 	@Override
@@ -30,18 +39,7 @@ abstract class XAbstractSchema<T> implements XSchema {
 		XResult result = safeParse(obj);
 
 		if (result.hasErrors()) {
-			throw new XException(result.errors());
+			throw new XException(result.getErrors());
 		}
-	}
-
-	protected XError buildError(String message) {
-		StackTraceElement invoker = Thread.currentThread().getStackTrace()[2];
-		String origin = invoker.getMethodName();
-
-		if (origin.contains("lambda")) {
-			origin = origin.split("\\$")[1];
-		}
-
-		return new XError(origin, message);
 	}
 }

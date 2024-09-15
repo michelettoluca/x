@@ -32,8 +32,7 @@ public class HelloApplication extends Application {
 			.nullable();
 
 		XSchema num = XBuilder.number()
-			.min(3)
-			.equals(3);
+			.min(1);
 
 
 		System.out.println(num.safeParse(XBuilder.string()));

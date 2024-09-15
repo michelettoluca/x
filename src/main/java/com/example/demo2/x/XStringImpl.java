@@ -6,14 +6,10 @@ import java.util.function.Function;
 class XStringImpl extends XAbstractSchema<String> implements XString {
 	@Override
 	public XString minLength(int length) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
-			if (value.length() < length) {
-				x.addError(buildError("min-length"));
+		register((value, errors) -> {
+			if (length > value.length()) {
+				errors.addError("min-length");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -21,14 +17,10 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString maxLength(int length) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
+		register((value, errors) -> {
 			if (value.length() > length) {
-				x.addError(buildError("max-length"));
+				errors.addError("max-length");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -36,14 +28,10 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString equals(String string) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
+		register((value, errors) -> {
 			if (!value.equals(string)) {
-				x.addError(buildError("not-equal"));
+				errors.addError("not-equal");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -51,14 +39,10 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString matches(String regex) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
+		register((value, errors) -> {
 			if (!value.matches(regex)) {
-				x.addError(buildError(""));
+				errors.addError("regex");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -66,14 +50,10 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public XString in(List<String> options) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
+		register((value, errors) -> {
 			if (!options.contains(value)) {
-				x.addError(buildError("in"));
+				errors.addError("in");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -81,29 +61,25 @@ class XStringImpl extends XAbstractSchema<String> implements XString {
 
 	@Override
 	public <T> XString in(List<T> options, Function<T, String> getter) {
-		chain = chain.andThen((x) -> {
-			String value = x.getValue();
-
+		register((value, errors) -> {
 			boolean isContained = options
 				.stream()
 				.anyMatch(option -> getter.apply(option).equals(value));
 
 			if (isContained) {
-				x.addError(buildError("in"));
+				errors.addError("in");
 			}
-
-			return x;
 		});
 
 		return this;
 	}
 
 	@Override
-	protected XResult type(Object obj) {
+	protected void type(Object obj, XResult result) {
 		if (obj instanceof String value) {
-			return new XResult(chain.apply(value).getErrors());
+			chain.accept(value, result);
+		} else {
+			result.addError("Expected String, but got " + obj.getClass().getSimpleName());
 		}
-
-		return new XResult(List.of(buildError("Expected String, but got " + obj.getClass().getSimpleName())));
 	}
 }

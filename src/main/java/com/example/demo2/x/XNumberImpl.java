@@ -5,14 +5,10 @@ import java.util.List;
 class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 	@Override
 	public XNumber min(Number min) {
-		chain = chain.andThen((x) -> {
-			Number value = x.getValue();
-
+		register((value, errors) -> {
 			if (value.doubleValue() < min.doubleValue()) {
-				x.addError(buildError("min"));
+				errors.addError("min");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -20,14 +16,10 @@ class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 
 	@Override
 	public XNumber max(Number max) {
-		chain = chain.andThen((x) -> {
-			Number value = x.getValue();
-
+		register((value, errors) -> {
 			if (value.doubleValue() > max.doubleValue()) {
-				x.addError(buildError("max"));
+				errors.addError("max");
 			}
-
-			return x;
 		});
 
 		return this;
@@ -35,25 +27,21 @@ class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 
 	@Override
 	public XNumber equals(Number target) {
-		chain = chain.andThen((x) -> {
-			Number value = x.getValue();
-
+		register((value, errors) -> {
 			if (value.doubleValue() != target.doubleValue()) {
-				x.addError(buildError("not-equal"));
+				errors.addError("equals");
 			}
-
-			return x;
 		});
 
 		return this;
 	}
 
 	@Override
-	public XResult type(Object obj) {
+	public void type(Object obj, XResult result) {
 		if (obj instanceof Number value) {
-			return new XResult(chain.apply(value).getErrors());
+			chain.accept(value, result);
+		} else {
+			result.addError("Expected String, but got " + obj.getClass().getSimpleName());
 		}
-
-		return new XResult(List.of(buildError("Expected Number got " + obj.getClass().getSimpleName())));
 	}
 }
