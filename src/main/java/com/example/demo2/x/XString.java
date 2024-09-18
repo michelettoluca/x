@@ -1,18 +1,37 @@
 package com.example.demo2.x;
 
-import java.util.List;
 import java.util.function.Function;
 
-public interface XString extends XSchema {
-	XString minLength(int length);
+public class XString extends AbstractXSchema<String> {
+	XString() {
+	}
 
-	XString maxLength(int length);
+	public XString minLength(int min) {
+		addValidator((value) -> {
+			if (value.length() < min) {
+				return new XError("min");
+			}
 
-	XString equals(String string);
+			return null;
+		});
 
-	XString matches(String regex);
+		return this;
+	}
 
-	XString in(List<String> options);
+	public XString maxLength(int max) {
+		addValidator((value) -> {
+			if (value.length() > max) {
+				return new XError("max");
+			}
 
-	<T> XString in(List<T> options, Function<T, String> getter);
+			return null;
+		});
+
+		return this;
+	}
+
+
+	public XString addValidator(Function<String, XError> validator) {
+		return (XString) super.addValidator(validator);
+	}
 }

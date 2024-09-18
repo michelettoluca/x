@@ -1,7 +1,7 @@
 package com.example.demo2;
 
-import com.example.demo2.x.XBuilder;
-import com.example.demo2.x.XNumber;
+import com.example.demo2.x.X;
+import com.example.demo2.x.XError;
 import com.example.demo2.x.XSchema;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
 
 public class HelloApplication extends Application {
 	@Override
@@ -27,22 +26,24 @@ public class HelloApplication extends Application {
 	}
 
 	public static void main(String[] args) {
-		XSchema stringSchema = XBuilder.string()
+		XSchema stringSchema = X.string()
 			.minLength(3)
-			.in(List.of(Test.values()), Test::name)
-			.nullable();
+			.addValidator((a) -> a.equals("asd") ? null : new XError("asd"))
+			.minLength(10)
+			.addValidator((a) -> a.contains("222") ? null : new XError("222!!!!"));
 
-		XNumber num = XBuilder.number()
-			.min(1);
-
-		XSchema asd = num
-			.cl
-			.max(10);
+//		XNumber num = XBuilder.number()
+//			.min(1);
+//
+//		X asd = num
+//			.cl
+//			.max(10);
 
 
 //		System.out.println(stringSchema.safeParse(XBuilder.string()));
-		System.out.println(stringSchema.safeParse("PALLE"));
-		System.out.println(num.safeParse(2));
+		System.out.println(stringSchema.parse("PL2222222222222222E"));
+		System.out.println(stringSchema.parse(2));
+		System.out.println(stringSchema.parse(null));
 //		System.out.println(num.safeParse(-10));
 //		System.out.println(num.safeParse(10));
 	}
