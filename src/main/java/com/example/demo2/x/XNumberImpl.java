@@ -43,4 +43,14 @@ class XNumberImpl extends XAbstractSchema<Number> implements XNumber {
 
 		return this;
 	}
+
+
+	@Override
+	public XNumber clone() {
+		try {
+			return (XNumberImpl) super.clone();
+		} catch (CloneNotSupportedException e) {
+			throw new AssertionError();
+		}
+	}
 }

@@ -1,6 +1,7 @@
 package com.example.demo2;
 
 import com.example.demo2.x.XBuilder;
+import com.example.demo2.x.XNumber;
 import com.example.demo2.x.XSchema;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,15 +32,17 @@ public class HelloApplication extends Application {
 			.in(List.of(Test.values()), Test::name)
 			.nullable();
 
-		XSchema num = XBuilder.number()
-			.min(1)
-			.max(10)
-			.equals(2);
+		XNumber num = XBuilder.number()
+			.min(1);
+
+		XSchema asd = num
+			.cl
+			.max(10);
 
 
 //		System.out.println(stringSchema.safeParse(XBuilder.string()));
 		System.out.println(stringSchema.safeParse("PALLE"));
-//		System.out.println(num.safeParse(2));
+		System.out.println(num.safeParse(2));
 //		System.out.println(num.safeParse(-10));
 //		System.out.println(num.safeParse(10));
 	}
